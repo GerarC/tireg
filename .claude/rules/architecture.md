@@ -47,7 +47,7 @@ internal/<modulo>/
     └── out/
         └── postgres/
             ├── adapter/            # implementa domain/spi contra Postgres
-            ├── entity/              # entidades de persistencia (structs con tags de DB)
+            ├── entity/              # entidades de persistencia (structs con tags de GORM)
             ├── mapper/              # entidad <-> modelo de dominio
             └── repository/         # acceso a datos (queries, sin lógica de negocio)
 ```

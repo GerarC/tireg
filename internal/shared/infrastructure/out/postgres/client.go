@@ -1,16 +1,16 @@
 package postgres
 
 import (
-	"context"
 	"fmt"
 
-	"github.com/jackc/pgx/v5/pgxpool"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 
 	"github.com/gerarc/tireg/internal/shared/application/utils/config"
 	"github.com/gerarc/tireg/internal/shared/infrastructure/out/postgres/util/constant"
 )
 
-func GetClient(appConfig *config.Config) (*pgxpool.Pool, error) {
+func GetClient(appConfig *config.Config) (*gorm.DB, error) {
 	dsn := fmt.Sprintf(
 		constant.ConnectionStringFormat,
 		appConfig.PostgresUser,
@@ -21,5 +21,5 @@ func GetClient(appConfig *config.Config) (*pgxpool.Pool, error) {
 		appConfig.PostgresSSLMode,
 	)
 
-	return pgxpool.New(context.Background(), dsn)
+	return gorm.Open(postgres.Open(dsn), &gorm.Config{})
 }

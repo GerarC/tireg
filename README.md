@@ -5,19 +5,21 @@ A backend to use with models, used for maintain a local database for time regist
 ## Architecture
 
 The project follows a hexagonal (ports & adapters) architecture organized by
-vertical business modules under `internal/` (`health`, `user`, `auth`, and
-more to come: `project`, `glossary`, `time-registry`), plus a `shared`
+vertical business modules under `internal/` (`health`, `user`, `auth`,
+`glossary`, and more to come: `project`, `time-registry`), plus a `shared`
 module for cross-cutting code. Full conventions and rules are documented in
-[CLAUDE.md](CLAUDE.md).
+[CLAUDE.md](CLAUDE.md) and `.claude/rules/`.
 
 Relevant architectural decisions are recorded as ADRs in
 [documentation/adr/](documentation/adr/):
 
 - [0001 - Hexagonal architecture organized by business module](documentation/adr/0001-hexagonal-architecture-by-module.md)
 - [0002 - Custom reflection-based dependency injection container](documentation/adr/0002-custom-reflection-based-di-container.md)
-- [0003 - Postgres access via pgx and a plain SQL schema](documentation/adr/0003-postgres-access-via-pgx-and-plain-sql-schema.md)
+- [0003 - Postgres access via pgx and a plain SQL schema](documentation/adr/0003-postgres-access-via-pgx-and-plain-sql-schema.md) (superseded by 0007)
 - [0004 - JWT authentication consuming the user module's api](documentation/adr/0004-jwt-authentication-consuming-user-api.md)
 - [0005 - Unified domain error structure](documentation/adr/0005-unified-domain-error-structure.md)
+- [0006 - Linux-first development environment](documentation/adr/0006-linux-first-development-environment.md)
+- [0007 - GORM as the project's ORM](documentation/adr/0007-gorm-as-project-orm.md)
 
 ## Requirements
 
@@ -36,8 +38,8 @@ Relevant architectural decisions are recorded as ADRs in
 docker compose up --build
 ```
 
-This starts the app on `:8080` and a Postgres 16 instance, with the schema
-in `db/init/` applied automatically on first startup.
+This starts the app on `:8080` and a Postgres 16 instance; the schema is
+created by GORM's `AutoMigrate` on startup (see [ADR 0007](documentation/adr/0007-gorm-as-project-orm.md)).
 
 ## Running the server locally (without Docker)
 
@@ -66,7 +68,16 @@ curl -X POST http://localhost:8080/api/v1/users \
 curl -X POST http://localhost:8080/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{"identifier":"ada","password":"super-secret"}'
+
+# use the access_token from the login response below
+curl http://localhost:8080/api/v1/glossary \
+  -H "Authorization: Bearer <access_token>"
 ```
+
+Every `/api/v1/glossary/*` endpoint requires that `Authorization: Bearer
+<token>` header and only ever reads/writes the authenticated user's own
+glossary types and projects — a fresh user's first `GET
+/api/v1/glossary/types` (or `GET /api/v1/glossary`) seeds 5 default types.
 
 Errors share one JSON shape across the whole API (see
 [ADR 0005](documentation/adr/0005-unified-domain-error-structure.md)):

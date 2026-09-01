@@ -1,6 +1,7 @@
 package bootstrap
 
 import (
+	"github.com/gerarc/tireg/internal/shared/infrastructure/in/rest/middleware"
 	bcryptadapter "github.com/gerarc/tireg/internal/shared/infrastructure/out/bcrypt/adapter"
 	"github.com/gerarc/tireg/internal/shared/infrastructure/out/postgres"
 
@@ -26,8 +27,15 @@ func WirePasswordHasherDependencies() {
 	appContainer.Register(bcryptadapter.NewBcryptPasswordHasher)
 }
 
+func WireMiddlewareDependencies() {
+	appContainer := container.GetInstance()
+
+	appContainer.Register(middleware.NewRequireAuthMiddleware)
+}
+
 func WireInfrastructureDependencies() {
 	WireConfigDependencies()
 	WirePostgresDependencies()
 	WirePasswordHasherDependencies()
+	WireMiddlewareDependencies()
 }

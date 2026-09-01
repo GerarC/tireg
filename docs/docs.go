@@ -61,6 +61,407 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/glossary": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns every glossary type and project owned by the authenticated user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "glossary"
+                ],
+                "summary": "Get the authenticated user's glossary",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryResponseDTO"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/glossary/projects": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns every glossary project owned by the authenticated user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "glossary"
+                ],
+                "summary": "List glossary projects",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryProjectResponseDTO"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Creates a new glossary project owned by the authenticated user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "glossary"
+                ],
+                "summary": "Create a glossary project",
+                "parameters": [
+                    {
+                        "description": "Glossary project payload",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryProjectRequestDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryProjectResponseDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/glossary/projects/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Updates a glossary project owned by the authenticated user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "glossary"
+                ],
+                "summary": "Update a glossary project",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Glossary project id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Glossary project payload",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryProjectRequestDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryProjectResponseDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Deletes a glossary project owned by the authenticated user",
+                "tags": [
+                    "glossary"
+                ],
+                "summary": "Delete a glossary project",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Glossary project id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/glossary/types": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns every glossary type owned by the authenticated user, seeding the defaults on first access",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "glossary"
+                ],
+                "summary": "List glossary types",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryTypeResponseDTO"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Creates a new glossary type owned by the authenticated user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "glossary"
+                ],
+                "summary": "Create a glossary type",
+                "parameters": [
+                    {
+                        "description": "Glossary type payload",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryTypeRequestDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryTypeResponseDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/glossary/types/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Updates a glossary type owned by the authenticated user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "glossary"
+                ],
+                "summary": "Update a glossary type",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Glossary type id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Glossary type payload",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryTypeRequestDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryTypeResponseDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Deletes a glossary type owned by the authenticated user",
+                "tags": [
+                    "glossary"
+                ],
+                "summary": "Delete a glossary type",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Glossary type id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/health": {
             "get": {
                 "description": "Returns the current health status of the service",
@@ -151,6 +552,121 @@ const docTemplate = `{
                 }
             }
         },
+        "github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryProjectRequestDTO": {
+            "type": "object",
+            "properties": {
+                "board_url": {
+                    "type": "string"
+                },
+                "client": {
+                    "type": "string"
+                },
+                "jira_project_key": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "project_label": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryProjectResponseDTO": {
+            "type": "object",
+            "properties": {
+                "board_url": {
+                    "type": "string"
+                },
+                "client": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "jira_project_key": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "project_label": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryResponseDTO": {
+            "type": "object",
+            "properties": {
+                "projects": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryProjectResponseDTO"
+                    }
+                },
+                "types": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryTypeResponseDTO"
+                    }
+                }
+            }
+        },
+        "github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryTypeRequestDTO": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "type_key": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryTypeResponseDTO": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "type_key": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
         "github_com_gerarc_tireg_internal_health_infrastructure_in_rest_v1_dto.HealthResponseDTO": {
             "type": "object",
             "properties": {
@@ -208,6 +724,9 @@ const docTemplate = `{
                 "created_at": {
                     "type": "string"
                 },
+                "created_by": {
+                    "type": "string"
+                },
                 "email": {
                     "type": "string"
                 },
@@ -220,10 +739,24 @@ const docTemplate = `{
                 "last_name": {
                     "type": "string"
                 },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                },
                 "username": {
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "description": "Type \"Bearer\" followed by a space and the JWT access token returned by /api/v1/auth/login.",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`
