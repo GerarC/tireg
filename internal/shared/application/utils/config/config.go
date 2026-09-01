@@ -20,6 +20,8 @@ type Config struct {
 
 	JWTSecret     string
 	JWTExpiration time.Duration
+
+	LogLevel string
 }
 
 func Load() Config {
@@ -42,6 +44,8 @@ func Load() Config {
 
 		JWTSecret:     os.Getenv(constant.JWTSecretEnvVar),
 		JWTExpiration: time.Duration(jwtExpirationMinutes) * time.Minute,
+
+		LogLevel: getEnvOrDefault(constant.LogLevelEnvVar, constant.DefaultLogLevel),
 	}
 }
 

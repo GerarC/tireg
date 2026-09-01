@@ -7,10 +7,11 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/gerarc/tireg/internal/shared/application/utils/config"
+	"github.com/gerarc/tireg/internal/shared/application/utils/logger"
 	"github.com/gerarc/tireg/internal/shared/infrastructure/out/postgres/util/constant"
 )
 
-func GetClient(appConfig *config.Config) (*gorm.DB, error) {
+func GetClient(appConfig *config.Config, appLogger logger.Logger) (*gorm.DB, error) {
 	dsn := fmt.Sprintf(
 		constant.ConnectionStringFormat,
 		appConfig.PostgresUser,
@@ -21,5 +22,5 @@ func GetClient(appConfig *config.Config) (*gorm.DB, error) {
 		appConfig.PostgresSSLMode,
 	)
 
-	return gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	return gorm.Open(postgres.Open(dsn), &gorm.Config{Logger: NewGormLoggerAdapter(appLogger)})
 }

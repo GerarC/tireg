@@ -6,7 +6,7 @@ A backend to use with models, used for maintain a local database for time regist
 
 The project follows a hexagonal (ports & adapters) architecture organized by
 vertical business modules under `internal/` (`health`, `user`, `auth`,
-`glossary`, and more to come: `project`, `time-registry`), plus a `shared`
+`glossary`, `task`, and more to come: `time-registry`), plus a `shared`
 module for cross-cutting code. Full conventions and rules are documented in
 [CLAUDE.md](CLAUDE.md) and `.claude/rules/`.
 
@@ -38,8 +38,18 @@ Relevant architectural decisions are recorded as ADRs in
 docker compose up --build
 ```
 
-This starts the app on `:8080` and a Postgres 16 instance; the schema is
-created by GORM's `AutoMigrate` on startup (see [ADR 0007](documentation/adr/0007-gorm-as-project-orm.md)).
+This starts the app on `:8080`, a Postgres 16 instance, and
+[Adminer](https://www.adminer.org/) on `:8081` to browse the database. The
+schema is created by GORM's `AutoMigrate` on startup (see
+[ADR 0007](documentation/adr/0007-gorm-as-project-orm.md)).
+
+To browse the database, open `http://localhost:8081` and log in with:
+
+- System: `PostgreSQL`
+- Server: `postgres`
+- Username: `tireg`
+- Password: `tireg`
+- Database: `tireg`
 
 ## Running the server locally (without Docker)
 

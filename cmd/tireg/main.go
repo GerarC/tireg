@@ -1,8 +1,8 @@
 package main
 
 import (
-	"log"
 	"net/http"
+	"os"
 
 	_ "github.com/gerarc/tireg/docs"
 
@@ -12,7 +12,11 @@ import (
 	shared "github.com/gerarc/tireg/internal/shared/application/bootstrap"
 	"github.com/gerarc/tireg/internal/shared/application/utils/config"
 	"github.com/gerarc/tireg/internal/shared/application/utils/container"
+	"github.com/gerarc/tireg/internal/shared/application/utils/logger"
 	"github.com/gerarc/tireg/internal/shared/infrastructure/in/rest"
+	sharedMiddleware "github.com/gerarc/tireg/internal/shared/infrastructure/in/rest/middleware"
+	task "github.com/gerarc/tireg/internal/task/application/bootstrap"
+	timeregistry "github.com/gerarc/tireg/internal/time-registry/application/bootstrap"
 	user "github.com/gerarc/tireg/internal/user/application/bootstrap"
 )
 
@@ -23,6 +27,8 @@ func wire() *http.ServeMux {
 	user.WireRoutes(mux)
 	auth.WireRoutes(mux)
 	glossary.WireRoutes(mux)
+	task.WireRoutes(mux)
+	timeregistry.WireRoutes(mux)
 
 	rest.RegisterSwaggerRoutes(mux)
 
@@ -43,12 +49,16 @@ func main() {
 
 	appContainer := container.GetInstance()
 	appConfig := container.MustResolve[*config.Config](appContainer)
+	appLogger := container.MustResolve[logger.Logger](appContainer)
+	requestLoggingMiddleware := container.MustResolve[*sharedMiddleware.RequestLoggingMiddleware](appContainer)
 
 	mux := wire()
+	handler := requestLoggingMiddleware.Wrap(mux)
 
-	log.Println("Starting tireg server...")
+	appLogger.Info("starting tireg server", "port", appConfig.Port)
 
-	if err := rest.HttpRestAPIInitializer(mux, appConfig.Port); err != nil {
-		log.Fatalf("critical error starting server: %v", err)
+	if err := rest.HttpRestAPIInitializer(handler, appConfig.Port); err != nil {
+		appLogger.Error("critical error starting server", err)
+		os.Exit(1)
 	}
 }

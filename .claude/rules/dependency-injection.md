@@ -28,3 +28,12 @@ proyecto (basado en reflection y generics de Go, sin librerías externas).
 - Registra siempre contra la interfaz (el tipo de retorno del constructor
   debe ser la interfaz `domain/api` o `domain/spi`, no la implementación
   concreta), para que el resto del sistema dependa de la abstracción.
+- No toda interfaz registrada es un puerto de dominio: utilidades
+  transversales que ningún caso de uso necesita por inversión de
+  dependencias (p. ej. `logger.Logger` en
+  `internal/shared/application/utils/logger/`) se definen junto a
+  `config`/`container` bajo `application/utils/`, no en `domain/spi`. Se
+  registran igual que cualquier otro constructor (`container.Register(logger.NewSlogAdapter)`)
+  y, al no tener "Transient"/"Request" en el nombre, el container ya las
+  trata como `SINGLETON` por defecto — una sola instancia cacheada tras el
+  primer `MustResolve`, sin necesitar un singleton global aparte.

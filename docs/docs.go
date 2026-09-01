@@ -482,6 +482,464 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/task-mappings": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns every task mapping owned by the authenticated user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "task-mapping"
+                ],
+                "summary": "List task mappings",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/github_com_gerarc_tireg_internal_task_infrastructure_in_rest_v1_dto.TaskMappingResponseDTO"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Creates a new task/meeting classification rule owned by the authenticated user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "task-mapping"
+                ],
+                "summary": "Create a task mapping",
+                "parameters": [
+                    {
+                        "description": "Task mapping payload",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_task_infrastructure_in_rest_v1_dto.TaskMappingRequestDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_task_infrastructure_in_rest_v1_dto.TaskMappingResponseDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/task-mappings/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns a single task mapping owned by the authenticated user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "task-mapping"
+                ],
+                "summary": "Get a task mapping",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Task mapping id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_task_infrastructure_in_rest_v1_dto.TaskMappingResponseDTO"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Updates a task mapping owned by the authenticated user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "task-mapping"
+                ],
+                "summary": "Update a task mapping",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Task mapping id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Task mapping payload",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_task_infrastructure_in_rest_v1_dto.TaskMappingRequestDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_task_infrastructure_in_rest_v1_dto.TaskMappingResponseDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Deletes a task mapping owned by the authenticated user",
+                "tags": [
+                    "task-mapping"
+                ],
+                "summary": "Delete a task mapping",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Task mapping id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/time-entries": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns every time entry owned by the authenticated user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "time-entry"
+                ],
+                "summary": "List time entries",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/github_com_gerarc_tireg_internal_time-registry_infrastructure_in_rest_v1_dto.TimeEntryResponseDTO"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Creates a new time entry owned by the authenticated user, auto-filling project/type/issue from the owner's task mappings when left blank",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "time-entry"
+                ],
+                "summary": "Create a time entry",
+                "parameters": [
+                    {
+                        "description": "Time entry payload",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_time-registry_infrastructure_in_rest_v1_dto.TimeEntryRequestDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_time-registry_infrastructure_in_rest_v1_dto.TimeEntryResponseDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/time-entries/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns a single time entry owned by the authenticated user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "time-entry"
+                ],
+                "summary": "Get a time entry",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Time entry id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_time-registry_infrastructure_in_rest_v1_dto.TimeEntryResponseDTO"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Updates a time entry owned by the authenticated user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "time-entry"
+                ],
+                "summary": "Update a time entry",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Time entry id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Time entry payload",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_time-registry_infrastructure_in_rest_v1_dto.TimeEntryRequestDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_time-registry_infrastructure_in_rest_v1_dto.TimeEntryResponseDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Deletes a time entry owned by the authenticated user",
+                "tags": [
+                    "time-entry"
+                ],
+                "summary": "Delete a time entry",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Time entry id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/users": {
             "post": {
                 "description": "Creates a new user account with a hashed password",
@@ -694,6 +1152,158 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "timestamp": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_gerarc_tireg_internal_task_infrastructure_in_rest_v1_dto.TaskMappingRequestDTO": {
+            "type": "object",
+            "properties": {
+                "issue_key": {
+                    "type": "string"
+                },
+                "match_keywords": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "match_organizer_domain": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "pattern": {
+                    "type": "string"
+                },
+                "project_label": {
+                    "type": "string"
+                },
+                "type_key": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_gerarc_tireg_internal_task_infrastructure_in_rest_v1_dto.TaskMappingResponseDTO": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "issue_key": {
+                    "type": "string"
+                },
+                "match_keywords": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "match_organizer_domain": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "pattern": {
+                    "type": "string"
+                },
+                "project_label": {
+                    "type": "string"
+                },
+                "type_key": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_gerarc_tireg_internal_time-registry_infrastructure_in_rest_v1_dto.TimeEntryRequestDTO": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "end": {
+                    "type": "string"
+                },
+                "hours": {
+                    "type": "number"
+                },
+                "issue_key": {
+                    "type": "string"
+                },
+                "jira_worklog_id": {
+                    "type": "string"
+                },
+                "project_label": {
+                    "type": "string"
+                },
+                "start": {
+                    "type": "string"
+                },
+                "type_key": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_gerarc_tireg_internal_time-registry_infrastructure_in_rest_v1_dto.TimeEntryResponseDTO": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "end": {
+                    "type": "string"
+                },
+                "hours": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "issue_key": {
+                    "type": "string"
+                },
+                "jira_worklog_id": {
+                    "type": "string"
+                },
+                "project_label": {
+                    "type": "string"
+                },
+                "start": {
+                    "type": "string"
+                },
+                "type_key": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
                     "type": "string"
                 }
             }
