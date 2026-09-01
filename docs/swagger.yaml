@@ -1,0 +1,145 @@
+basePath: /
+definitions:
+  github_com_gerarc_tireg_internal_auth_infrastructure_in_rest_v1_dto.LoginRequestDTO:
+    properties:
+      identifier:
+        type: string
+      password:
+        type: string
+    type: object
+  github_com_gerarc_tireg_internal_auth_infrastructure_in_rest_v1_dto.LoginResponseDTO:
+    properties:
+      access_token:
+        type: string
+      expires_at:
+        type: string
+    type: object
+  github_com_gerarc_tireg_internal_health_infrastructure_in_rest_v1_dto.HealthResponseDTO:
+    properties:
+      service:
+        type: string
+      status:
+        type: string
+    type: object
+  github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO:
+    properties:
+      code:
+        type: integer
+      details:
+        items:
+          type: string
+        type: array
+      message:
+        type: string
+      timestamp:
+        type: string
+    type: object
+  github_com_gerarc_tireg_internal_user_infrastructure_in_rest_v1_dto.UserRegisterRequestDTO:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  github_com_gerarc_tireg_internal_user_infrastructure_in_rest_v1_dto.UserResponseDTO:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+      username:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Backend for time registration, projects, and glossary management.
+  title: tireg API
+  version: "1.0"
+paths:
+  /api/v1/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Validates credentials and returns a signed JWT access token
+      parameters:
+      - description: Login credentials
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_gerarc_tireg_internal_auth_infrastructure_in_rest_v1_dto.LoginRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_auth_infrastructure_in_rest_v1_dto.LoginResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+      summary: Authenticate a user
+      tags:
+      - auth
+  /api/v1/health:
+    get:
+      description: Returns the current health status of the service
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_health_infrastructure_in_rest_v1_dto.HealthResponseDTO'
+      summary: Check service health
+      tags:
+      - health
+  /api/v1/users:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new user account with a hashed password
+      parameters:
+      - description: User registration payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_gerarc_tireg_internal_user_infrastructure_in_rest_v1_dto.UserRegisterRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_user_infrastructure_in_rest_v1_dto.UserResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+      summary: Register a new user
+      tags:
+      - user
+swagger: "2.0"

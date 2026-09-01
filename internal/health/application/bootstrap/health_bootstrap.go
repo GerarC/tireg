@@ -11,13 +11,13 @@ import (
 func WireUseCaseDependencies() {
 	appContainer := container.GetInstance()
 
-	appContainer.Register(usecase.NewHealthUseCase)
+	appContainer.Register(usecase.NewCheckHealthUseCase)
 }
 
 func WireHandlerDependencies() {
 	appContainer := container.GetInstance()
 
-	appContainer.Register(controller.NewHealthController)
+	appContainer.Register(controller.NewCheckHealthController)
 }
 
 func WireRoutes(mux *http.ServeMux) {
@@ -26,6 +26,6 @@ func WireRoutes(mux *http.ServeMux) {
 
 	appContainer := container.GetInstance()
 
-	healthController := container.MustResolve[*controller.HealthController](appContainer)
-	healthController.RegisterRoutes(mux)
+	checkHealthController := container.MustResolve[*controller.CheckHealthController](appContainer)
+	checkHealthController.RegisterRoutes(mux)
 }

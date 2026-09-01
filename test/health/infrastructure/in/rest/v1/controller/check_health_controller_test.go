@@ -20,14 +20,14 @@ func (stub *stubHealthUseCase) CheckHealth() model.HealthStatus {
 	return stub.healthStatus
 }
 
-func TestHealthController_HealthCheck_ReturnsMappedStatus(t *testing.T) {
+func TestCheckHealthController_CheckHealth_ReturnsMappedStatus(t *testing.T) {
 	stub := &stubHealthUseCase{healthStatus: model.HealthStatus{Status: "UP", Service: "tireg"}}
-	healthController := controller.NewHealthController(stub)
+	healthController := controller.NewCheckHealthController(stub)
 
 	request := httptest.NewRequest(http.MethodGet, constant.HealthRoutePath, nil)
 	responseRecorder := httptest.NewRecorder()
 
-	healthController.HealthCheck(responseRecorder, request)
+	healthController.CheckHealth(responseRecorder, request)
 
 	if responseRecorder.Code != http.StatusOK {
 		t.Fatalf("expected status code %d, got %d", http.StatusOK, responseRecorder.Code)
@@ -43,9 +43,9 @@ func TestHealthController_HealthCheck_ReturnsMappedStatus(t *testing.T) {
 	}
 }
 
-func TestHealthController_RegisterRoutes_RegistersHealthRoute(t *testing.T) {
+func TestCheckHealthController_RegisterRoutes_RegistersHealthRoute(t *testing.T) {
 	stub := &stubHealthUseCase{healthStatus: model.HealthStatus{Status: "UP", Service: "tireg"}}
-	healthController := controller.NewHealthController(stub)
+	healthController := controller.NewCheckHealthController(stub)
 
 	mux := http.NewServeMux()
 	healthController.RegisterRoutes(mux)

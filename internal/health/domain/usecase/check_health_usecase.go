@@ -6,13 +6,13 @@ import (
 	"github.com/gerarc/tireg/internal/health/domain/util/constant"
 )
 
-type HealthUseCaseImplemented struct{}
+type CheckHealthUseCaseImplemented struct{}
 
-func NewHealthUseCase() api.HealthUseCase {
-	return &HealthUseCaseImplemented{}
+func NewCheckHealthUseCase() api.CheckHealthUseCase {
+	return &CheckHealthUseCaseImplemented{}
 }
 
-func (healthUseCase *HealthUseCaseImplemented) CheckHealth() model.HealthStatus {
+func (checkHealthUseCase *CheckHealthUseCaseImplemented) CheckHealth() model.HealthStatus {
 	return model.HealthStatus{
 		Status:  constant.StatusUp,
 		Service: constant.ServiceName,
