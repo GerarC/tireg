@@ -1,7 +1,8 @@
 package postgres
 
 import (
-	"fmt"
+	"net"
+	"net/url"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -11,16 +12,20 @@ import (
 	"github.com/gerarc/tireg/internal/shared/infrastructure/out/postgres/util/constant"
 )
 
-func GetClient(appConfig *config.Config, appLogger logger.Logger) (*gorm.DB, error) {
-	dsn := fmt.Sprintf(
-		constant.ConnectionStringFormat,
-		appConfig.PostgresUser,
-		appConfig.PostgresPassword,
-		appConfig.PostgresHost,
-		appConfig.PostgresPort,
-		appConfig.PostgresDBName,
-		appConfig.PostgresSSLMode,
-	)
+func BuildDSN(appConfig *config.Config) string {
+	dsn := url.URL{
+		Scheme: constant.Scheme,
+		User:   url.UserPassword(appConfig.PostgresUser, appConfig.PostgresPassword),
+		Host:   net.JoinHostPort(appConfig.PostgresHost, appConfig.PostgresPort),
+		Path:   "/" + appConfig.PostgresDBName,
+		RawQuery: url.Values{
+			constant.SSLModeQueryParam: {appConfig.PostgresSSLMode},
+		}.Encode(),
+	}
 
-	return gorm.Open(postgres.Open(dsn), &gorm.Config{Logger: NewGormLoggerAdapter(appLogger)})
+	return dsn.String()
+}
+
+func GetClient(appConfig *config.Config, appLogger logger.Logger) (*gorm.DB, error) {
+	return gorm.Open(postgres.Open(BuildDSN(appConfig)), &gorm.Config{Logger: NewGormLoggerAdapter(appLogger)})
 }
