@@ -2,7 +2,7 @@ services:
   - type: web
     name: tireg
     runtime: go
-    plan: starter
+    plan: free
     buildCommand: go build -o app ./cmd/tireg
     startCommand: ./app
     healthCheckPath: /api/v1/health
