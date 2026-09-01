@@ -9,8 +9,8 @@ import (
 
 	sharedRest "github.com/gerarc/tireg/internal/shared/infrastructure/in/rest"
 
-	"github.com/gerarc/tireg/internal/user/domain/model"
 	userException "github.com/gerarc/tireg/internal/user/domain/exception"
+	"github.com/gerarc/tireg/internal/user/domain/model"
 	"github.com/gerarc/tireg/internal/user/infrastructure/in/rest/v1/controller"
 	"github.com/gerarc/tireg/internal/user/infrastructure/in/rest/v1/dto"
 )

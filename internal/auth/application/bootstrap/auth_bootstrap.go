@@ -15,12 +15,14 @@ func WireTokenIssuerDependencies() {
 	appContainer := container.GetInstance()
 
 	appContainer.Register(jwtadapter.NewJWTTokenIssuer)
+	appContainer.Register(jwtadapter.NewJWTTokenVerifier)
 }
 
 func WireUseCaseDependencies() {
 	appContainer := container.GetInstance()
 
 	appContainer.Register(usecase.NewLoginUseCase)
+	appContainer.Register(usecase.NewVerifyTokenUseCase)
 }
 
 func WireHandlerDependencies() {

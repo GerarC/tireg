@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/jackc/pgx/v5"
+	"gorm.io/gorm"
 
 	"github.com/gerarc/tireg/internal/user/domain/exception"
 	"github.com/gerarc/tireg/internal/user/domain/model"
@@ -32,7 +32,7 @@ func (userQueryAdapter *UserQueryAdapter) ExistsByEmail(email string) (bool, err
 func (userQueryAdapter *UserQueryAdapter) FindByIdentifier(identifier string) (model.User, error) {
 	found, err := userQueryAdapter.userQueryRepository.SelectByIdentifier(context.Background(), identifier)
 	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return model.User{}, exception.NewUserNotFoundError()
 		}
 

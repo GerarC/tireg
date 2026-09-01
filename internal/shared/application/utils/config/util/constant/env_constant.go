@@ -22,4 +22,7 @@ const (
 	JWTExpirationMinutesEnvVar = "JWT_EXPIRATION_MINUTES"
 
 	DefaultJWTExpirationMinutes = "60"
+
+	LogLevelEnvVar  = "LOG_LEVEL"
+	DefaultLogLevel = "info"
 )

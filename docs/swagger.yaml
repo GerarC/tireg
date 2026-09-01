@@ -14,6 +14,81 @@ definitions:
       expires_at:
         type: string
     type: object
+  github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryProjectRequestDTO:
+    properties:
+      board_url:
+        type: string
+      client:
+        type: string
+      jira_project_key:
+        type: string
+      notes:
+        type: string
+      project_label:
+        type: string
+    type: object
+  github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryProjectResponseDTO:
+    properties:
+      board_url:
+        type: string
+      client:
+        type: string
+      created_at:
+        type: string
+      created_by:
+        type: string
+      id:
+        type: string
+      jira_project_key:
+        type: string
+      notes:
+        type: string
+      project_label:
+        type: string
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryResponseDTO:
+    properties:
+      projects:
+        items:
+          $ref: '#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryProjectResponseDTO'
+        type: array
+      types:
+        items:
+          $ref: '#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryTypeResponseDTO'
+        type: array
+    type: object
+  github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryTypeRequestDTO:
+    properties:
+      description:
+        type: string
+      label:
+        type: string
+      type_key:
+        type: string
+    type: object
+  github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryTypeResponseDTO:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      label:
+        type: string
+      type_key:
+        type: string
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
   github_com_gerarc_tireg_internal_health_infrastructure_in_rest_v1_dto.HealthResponseDTO:
     properties:
       service:
@@ -34,6 +109,106 @@ definitions:
       timestamp:
         type: string
     type: object
+  github_com_gerarc_tireg_internal_task_infrastructure_in_rest_v1_dto.TaskMappingRequestDTO:
+    properties:
+      issue_key:
+        type: string
+      match_keywords:
+        items:
+          type: string
+        type: array
+      match_organizer_domain:
+        type: string
+      notes:
+        type: string
+      pattern:
+        type: string
+      project_label:
+        type: string
+      type_key:
+        type: string
+    type: object
+  github_com_gerarc_tireg_internal_task_infrastructure_in_rest_v1_dto.TaskMappingResponseDTO:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: string
+      id:
+        type: string
+      issue_key:
+        type: string
+      match_keywords:
+        items:
+          type: string
+        type: array
+      match_organizer_domain:
+        type: string
+      notes:
+        type: string
+      pattern:
+        type: string
+      project_label:
+        type: string
+      type_key:
+        type: string
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  github_com_gerarc_tireg_internal_time-registry_infrastructure_in_rest_v1_dto.TimeEntryRequestDTO:
+    properties:
+      date:
+        type: string
+      description:
+        type: string
+      end:
+        type: string
+      hours:
+        type: number
+      issue_key:
+        type: string
+      jira_worklog_id:
+        type: string
+      project_label:
+        type: string
+      start:
+        type: string
+      type_key:
+        type: string
+    type: object
+  github_com_gerarc_tireg_internal_time-registry_infrastructure_in_rest_v1_dto.TimeEntryResponseDTO:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: string
+      date:
+        type: string
+      description:
+        type: string
+      end:
+        type: string
+      hours:
+        type: number
+      id:
+        type: string
+      issue_key:
+        type: string
+      jira_worklog_id:
+        type: string
+      project_label:
+        type: string
+      start:
+        type: string
+      type_key:
+        type: string
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
   github_com_gerarc_tireg_internal_user_infrastructure_in_rest_v1_dto.UserRegisterRequestDTO:
     properties:
       email:
@@ -51,6 +226,8 @@ definitions:
     properties:
       created_at:
         type: string
+      created_by:
+        type: string
       email:
         type: string
       first_name:
@@ -58,6 +235,10 @@ definitions:
       id:
         type: string
       last_name:
+        type: string
+      updated_at:
+        type: string
+      updated_by:
         type: string
       username:
         type: string
@@ -99,6 +280,261 @@ paths:
       summary: Authenticate a user
       tags:
       - auth
+  /api/v1/glossary:
+    get:
+      description: Returns every glossary type and project owned by the authenticated
+        user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryResponseDTO'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+      security:
+      - BearerAuth: []
+      summary: Get the authenticated user's glossary
+      tags:
+      - glossary
+  /api/v1/glossary/projects:
+    get:
+      description: Returns every glossary project owned by the authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryProjectResponseDTO'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+      security:
+      - BearerAuth: []
+      summary: List glossary projects
+      tags:
+      - glossary
+    post:
+      consumes:
+      - application/json
+      description: Creates a new glossary project owned by the authenticated user
+      parameters:
+      - description: Glossary project payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryProjectRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryProjectResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+      security:
+      - BearerAuth: []
+      summary: Create a glossary project
+      tags:
+      - glossary
+  /api/v1/glossary/projects/{id}:
+    delete:
+      description: Deletes a glossary project owned by the authenticated user
+      parameters:
+      - description: Glossary project id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+      security:
+      - BearerAuth: []
+      summary: Delete a glossary project
+      tags:
+      - glossary
+    put:
+      consumes:
+      - application/json
+      description: Updates a glossary project owned by the authenticated user
+      parameters:
+      - description: Glossary project id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Glossary project payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryProjectRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryProjectResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+      security:
+      - BearerAuth: []
+      summary: Update a glossary project
+      tags:
+      - glossary
+  /api/v1/glossary/types:
+    get:
+      description: Returns every glossary type owned by the authenticated user, seeding
+        the defaults on first access
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryTypeResponseDTO'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+      security:
+      - BearerAuth: []
+      summary: List glossary types
+      tags:
+      - glossary
+    post:
+      consumes:
+      - application/json
+      description: Creates a new glossary type owned by the authenticated user
+      parameters:
+      - description: Glossary type payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryTypeRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryTypeResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+      security:
+      - BearerAuth: []
+      summary: Create a glossary type
+      tags:
+      - glossary
+  /api/v1/glossary/types/{id}:
+    delete:
+      description: Deletes a glossary type owned by the authenticated user
+      parameters:
+      - description: Glossary type id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+      security:
+      - BearerAuth: []
+      summary: Delete a glossary type
+      tags:
+      - glossary
+    put:
+      consumes:
+      - application/json
+      description: Updates a glossary type owned by the authenticated user
+      parameters:
+      - description: Glossary type id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Glossary type payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryTypeRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_glossary_infrastructure_in_rest_v1_dto.GlossaryTypeResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+      security:
+      - BearerAuth: []
+      summary: Update a glossary type
+      tags:
+      - glossary
   /api/v1/health:
     get:
       description: Returns the current health status of the service
@@ -112,6 +548,298 @@ paths:
       summary: Check service health
       tags:
       - health
+  /api/v1/task-mappings:
+    get:
+      description: Returns every task mapping owned by the authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_gerarc_tireg_internal_task_infrastructure_in_rest_v1_dto.TaskMappingResponseDTO'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+      security:
+      - BearerAuth: []
+      summary: List task mappings
+      tags:
+      - task-mapping
+    post:
+      consumes:
+      - application/json
+      description: Creates a new task/meeting classification rule owned by the authenticated
+        user
+      parameters:
+      - description: Task mapping payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_gerarc_tireg_internal_task_infrastructure_in_rest_v1_dto.TaskMappingRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_task_infrastructure_in_rest_v1_dto.TaskMappingResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+      security:
+      - BearerAuth: []
+      summary: Create a task mapping
+      tags:
+      - task-mapping
+  /api/v1/task-mappings/{id}:
+    delete:
+      description: Deletes a task mapping owned by the authenticated user
+      parameters:
+      - description: Task mapping id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+      security:
+      - BearerAuth: []
+      summary: Delete a task mapping
+      tags:
+      - task-mapping
+    get:
+      description: Returns a single task mapping owned by the authenticated user
+      parameters:
+      - description: Task mapping id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_task_infrastructure_in_rest_v1_dto.TaskMappingResponseDTO'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+      security:
+      - BearerAuth: []
+      summary: Get a task mapping
+      tags:
+      - task-mapping
+    put:
+      consumes:
+      - application/json
+      description: Updates a task mapping owned by the authenticated user
+      parameters:
+      - description: Task mapping id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Task mapping payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_gerarc_tireg_internal_task_infrastructure_in_rest_v1_dto.TaskMappingRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_task_infrastructure_in_rest_v1_dto.TaskMappingResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+      security:
+      - BearerAuth: []
+      summary: Update a task mapping
+      tags:
+      - task-mapping
+  /api/v1/time-entries:
+    get:
+      description: Returns every time entry owned by the authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_gerarc_tireg_internal_time-registry_infrastructure_in_rest_v1_dto.TimeEntryResponseDTO'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+      security:
+      - BearerAuth: []
+      summary: List time entries
+      tags:
+      - time-entry
+    post:
+      consumes:
+      - application/json
+      description: Creates a new time entry owned by the authenticated user, auto-filling
+        project/type/issue from the owner's task mappings when left blank
+      parameters:
+      - description: Time entry payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_gerarc_tireg_internal_time-registry_infrastructure_in_rest_v1_dto.TimeEntryRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_time-registry_infrastructure_in_rest_v1_dto.TimeEntryResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+      security:
+      - BearerAuth: []
+      summary: Create a time entry
+      tags:
+      - time-entry
+  /api/v1/time-entries/{id}:
+    delete:
+      description: Deletes a time entry owned by the authenticated user
+      parameters:
+      - description: Time entry id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+      security:
+      - BearerAuth: []
+      summary: Delete a time entry
+      tags:
+      - time-entry
+    get:
+      description: Returns a single time entry owned by the authenticated user
+      parameters:
+      - description: Time entry id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_time-registry_infrastructure_in_rest_v1_dto.TimeEntryResponseDTO'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+      security:
+      - BearerAuth: []
+      summary: Get a time entry
+      tags:
+      - time-entry
+    put:
+      consumes:
+      - application/json
+      description: Updates a time entry owned by the authenticated user
+      parameters:
+      - description: Time entry id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Time entry payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_gerarc_tireg_internal_time-registry_infrastructure_in_rest_v1_dto.TimeEntryRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_time-registry_infrastructure_in_rest_v1_dto.TimeEntryResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_gerarc_tireg_internal_shared_infrastructure_in_rest.ErrorResponseDTO'
+      security:
+      - BearerAuth: []
+      summary: Update a time entry
+      tags:
+      - time-entry
   /api/v1/users:
     post:
       consumes:
@@ -142,4 +870,11 @@ paths:
       summary: Register a new user
       tags:
       - user
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and the JWT access token returned
+      by /api/v1/auth/login.
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

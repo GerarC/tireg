@@ -27,6 +27,11 @@ import (
 func WirePersistenceDependencies() {
     c := container.GetInstance()
 
+    db := container.MustResolve[*gorm.DB](c)
+    if err := db.AutoMigrate(&entity.XEntity{}); err != nil {
+        panic(err)
+    }
+
     c.Register(repository.NewXRepository)
     c.Register(adapter.NewXAdapter)
 }
@@ -74,4 +79,13 @@ Cuando un módulo consume el `domain/api` de otro (ver `rules/architecture.md`),
 módulo consumidor — p. ej. `user.WireRoutes(mux)` antes que
 `auth.WireRoutes(mux)`, porque el `usecase` de `auth` resuelve
 `user/domain/api.UserUseCase` desde el container, y esa interfaz solo queda
-registrada una vez que `user.WireRoutes` corrió.
+registrada una vez que `user.WireRoutes` corrió. Mismo caso con
+`auth.WireRoutes(mux)` antes que `glossary.WireRoutes(mux)`: las rutas de
+`glossary` se envuelven con el middleware de autenticación compartido
+(`internal/shared/infrastructure/in/rest/middleware`), que depende de
+`auth/domain/api.VerifyTokenUseCase`.
+
+Cada módulo migra su propio schema (ver [ADR 0007](../../documentation/adr/0007-gorm-as-project-orm.md))
+resolviendo `*gorm.DB` del container y llamando `AutoMigrate` con sus
+propias entidades, como primer paso de su `WirePersistenceDependencies` —
+nunca desde `shared` ni desde `cmd`.

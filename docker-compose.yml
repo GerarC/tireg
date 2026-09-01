@@ -25,7 +25,6 @@ services:
       POSTGRES_DB: tireg
     volumes:
       - tireg-postgres-data:/var/lib/postgresql/data
-      - ./db/init:/docker-entrypoint-initdb.d:ro
     ports:
       - "5433:5432"
     healthcheck:
@@ -33,6 +32,14 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  adminer:
+    image: adminer:latest
+    ports:
+      - "8081:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 volumes:
   tireg-postgres-data:

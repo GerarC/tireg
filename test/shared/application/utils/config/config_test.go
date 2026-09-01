@@ -92,3 +92,26 @@ func TestLoad_UsesJWTExpirationEnvVarWhenSet(t *testing.T) {
 		t.Fatalf("expected jwt expiration of 15 minutes, got %v", appConfig.JWTExpiration)
 	}
 }
+
+func TestLoad_UsesDefaultLogLevel_WhenEnvVarNotSet(t *testing.T) {
+	os.Unsetenv("LOG_LEVEL")
+
+	appConfig := config.Load()
+
+	if appConfig.LogLevel != "info" {
+		t.Fatalf("expected default log level %q, got %q", "info", appConfig.LogLevel)
+	}
+}
+
+func TestLoad_UsesLogLevelEnvVarWhenSet(t *testing.T) {
+	os.Setenv("LOG_LEVEL", "debug")
+	t.Cleanup(func() {
+		os.Unsetenv("LOG_LEVEL")
+	})
+
+	appConfig := config.Load()
+
+	if appConfig.LogLevel != "debug" {
+		t.Fatalf("expected log level %q, got %q", "debug", appConfig.LogLevel)
+	}
+}

@@ -1,6 +1,9 @@
 package mapper
 
 import (
+	sharedModel "github.com/gerarc/tireg/internal/shared/domain/model"
+	sharedEntity "github.com/gerarc/tireg/internal/shared/infrastructure/out/postgres/entity"
+
 	"github.com/gerarc/tireg/internal/user/domain/model"
 	"github.com/gerarc/tireg/internal/user/infrastructure/out/postgres/entity"
 )
@@ -13,7 +16,12 @@ func ToUserEntity(user model.User) entity.UserEntity {
 		Username:     user.Username,
 		Email:        user.Email,
 		PasswordHash: user.PasswordHash,
-		Audit:        user.Audit,
+		AuditEntity: sharedEntity.AuditEntity{
+			CreatedAt: user.CreatedAt,
+			CreatedBy: user.CreatedBy,
+			UpdatedAt: user.UpdatedAt,
+			UpdatedBy: user.UpdatedBy,
+		},
 	}
 }
 
@@ -25,6 +33,11 @@ func ToUserModel(userEntity entity.UserEntity) model.User {
 		Username:     userEntity.Username,
 		Email:        userEntity.Email,
 		PasswordHash: userEntity.PasswordHash,
-		Audit:        userEntity.Audit,
+		Audit: sharedModel.Audit{
+			CreatedAt: userEntity.CreatedAt,
+			CreatedBy: userEntity.CreatedBy,
+			UpdatedAt: userEntity.UpdatedAt,
+			UpdatedBy: userEntity.UpdatedBy,
+		},
 	}
 }

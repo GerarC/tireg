@@ -157,15 +157,11 @@ func (container *Container) resolve(serviceType reflect.Type, name string) (any,
 	p := &container.providers[serviceType][idx]
 
 	switch p.providerType {
-	case SINGLETON, APPLICATION:
+	case SINGLETON, APPLICATION, REQUEST, SESSION, WEBSOCKET:
 		if p.instance != nil {
 			return p.instance, nil
 		}
 	case TRANSIENT:
-	case REQUEST, SESSION, WEBSOCKET:
-		if p.instance != nil {
-			return p.instance, nil
-		}
 	}
 
 	dependencies, err := container.resolveDependencies(p.constructor)

@@ -1,17 +1,28 @@
 package bootstrap
 
 import (
+	"github.com/gerarc/tireg/internal/shared/infrastructure/in/rest"
+	"github.com/gerarc/tireg/internal/shared/infrastructure/in/rest/middleware"
 	bcryptadapter "github.com/gerarc/tireg/internal/shared/infrastructure/out/bcrypt/adapter"
 	"github.com/gerarc/tireg/internal/shared/infrastructure/out/postgres"
 
 	"github.com/gerarc/tireg/internal/shared/application/utils/config"
 	"github.com/gerarc/tireg/internal/shared/application/utils/container"
+	"github.com/gerarc/tireg/internal/shared/application/utils/logger"
 )
 
 func WireConfigDependencies() {
 	appContainer := container.GetInstance()
 
 	appContainer.Register(config.NewConfig)
+}
+
+func WireLoggerDependencies() {
+	appContainer := container.GetInstance()
+
+	appContainer.Register(logger.NewSlogAdapter)
+
+	rest.SetLogger(container.MustResolve[logger.Logger](appContainer))
 }
 
 func WirePostgresDependencies() {
@@ -26,8 +37,17 @@ func WirePasswordHasherDependencies() {
 	appContainer.Register(bcryptadapter.NewBcryptPasswordHasher)
 }
 
+func WireMiddlewareDependencies() {
+	appContainer := container.GetInstance()
+
+	appContainer.Register(middleware.NewRequireAuthMiddleware)
+	appContainer.Register(middleware.NewRequestLoggingMiddleware)
+}
+
 func WireInfrastructureDependencies() {
 	WireConfigDependencies()
+	WireLoggerDependencies()
 	WirePostgresDependencies()
 	WirePasswordHasherDependencies()
+	WireMiddlewareDependencies()
 }
