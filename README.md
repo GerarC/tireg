@@ -108,3 +108,35 @@ Tests live under `test/`, mirroring the structure of `internal/`:
 ```bash
 go test ./...
 ```
+
+## Deploying
+
+Production runs the API on [Render](https://render.com) (native Go
+runtime, no Docker) against a [Supabase](https://supabase.com) Postgres
+database, deployed via GitHub Actions rather than Render's push-triggered
+auto-deploy — [.github/workflows/ci.yml](.github/workflows/ci.yml) must
+pass on `main` before [.github/workflows/deploy.yml](.github/workflows/deploy.yml)
+fires the Render deploy hook. No application code differs between local
+Docker and production — `config.go` reads everything from env vars,
+including `POSTGRES_SSLMODE` (`require` in production, `disable` locally),
+and the schema is created by GORM's `AutoMigrate` on first boot, same as
+locally (see [ADR 0007](documentation/adr/0007-gorm-as-project-orm.md)).
+
+One-time setup:
+
+1. **Supabase**: grab the direct-connection details from
+   Settings → Database (host, port `5432`, user, password, database name).
+   Use the direct connection, not the pooler — Render is a persistent
+   service, not serverless, so it doesn't need PgBouncer.
+2. **Render**: "New +" → "Blueprint", point it at this repo so it picks up
+   [render.yaml](render.yaml). It creates the service without deploying
+   (`autoDeploy: false` — deploys are GitHub Actions' job).
+3. In the new Render service's **Environment** tab, fill in the variables
+   marked `sync: false` in `render.yaml` (the Supabase values from step 1,
+   plus a strong `JWT_SECRET`).
+4. In the Render service's **Settings → Deploy Hook**, copy the hook URL.
+5. In GitHub, repo **Settings → Secrets and variables → Actions**, add it
+   as a secret named `RENDER_DEPLOY_HOOK_URL`.
+6. Push to `main` (or merge a PR into it). Once CI is green, the deploy
+   workflow fires the hook; watch the Render logs for the `AutoMigrate`
+   table creation followed by `"starting tireg server"`.
